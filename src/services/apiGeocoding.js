@@ -8,6 +8,15 @@ export async function getCoordsByName(cityName) {
   const lon = data.features[0].properties.lon;
   const coords = { lat: lat, lon: lon };
 
-  //   const coords = `latitude=${lat}&longitude=${lon}`;
+  
   return coords;
+}
+
+export async function getCityNameByCoords({lat, lon}) {
+  
+  const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}`)
+  if (!res.ok) throw new Error('Failed getting address')
+
+  const data = await res.json()
+  return(data.city)
 }

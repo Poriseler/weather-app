@@ -1,34 +1,44 @@
 import { useDispatch, useSelector } from "react-redux";
 import { updateSelectedDay } from "./tilesListSlice";
-import { useEffect, useState } from "react";
+import { describeWeather, getWeatherImage } from "../../utils/helpers";
 
-function Tile({ day }) {
-  const { index, temp, maxTemp, date, sunrise, sunset, rainSum } = day;
-  const [isSelected, setIsSelected] = useState(false);
-  const selectedTileIndex = useSelector((state) => state.tilesList.selectedDay);
+function Tile({ day, onClick: onOpenModal }) {
+  const { index, temp, maxTemp, minTemp, date, weatherCode } = day;
+
+  const isSelected = useSelector((state) => state.tilesList.selectedDay) === index;
+  
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   if (selectedTileIndex === index) setIsSelected(true);
-  // }, [index, selectedTileIndex, setIsSelected]);
-  return (
-    <div
-      className={`${
-        selectedTileIndex === index ? "scale-125" : "transform-none"
-      } flex flex-col items-center justify-center rounded-lg bg-gray-400 p-3`}
-      onClick={(e) => dispatch(updateSelectedDay(index))}
-    >
-      <img src="./src/static/sun.png" alt="" />
-      <p className="font-medium">Nice weather</p>
-      {temp !== null ? (
-        <p>
-          Current <span>{temp}</span>
-        </p>
-      ) : null}
+  function handleClick() {
+    dispatch(updateSelectedDay(index));
+    onOpenModal()
+   
+  }
 
-      <p>
-        <span className="m-1 font-bold text-yellow-500">{maxTemp} C</span>
-        <span className="m-1 font-bold text-cyan-900">28 C</span>{" "}
-      </p>
+  return (
+    <div className={`${isSelected ? "scale-125" : "transform-none"} flex flex-col min-h-[13rem] items-center justify-between rounded-lg bg-slate-200 p-3 hover:bg-slate-300  transition-[0.5s]`}
+      onClick={handleClick}
+    >
+      
+      <div className="pt-3">
+        <img src={`./src/static/${getWeatherImage(weatherCode)}`} alt="" />
+
+      </div>
+      <div className="p-1">
+        {temp !== null ? (
+          <p className="text-center">
+            Current <span className="font-bold ms-1">{temp} C</span>
+          </p>
+        ) : null}
+
+        <p className="font-medium text-center">{describeWeather(weatherCode)}</p>
+        <p>
+          <span className="m-1 font-bold text-yellow-500">{maxTemp} C</span>
+          <span className="m-1 font-bold text-cyan-900">{minTemp} C</span>
+        </p>
+        <p className="text-center">
+          { date}
+        </p>
+      </div>
     </div>
   );
 }

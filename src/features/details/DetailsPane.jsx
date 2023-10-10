@@ -1,12 +1,15 @@
-function DetailsPane() {
+function DetailsPane({day}) {
+  const {date, sunrise, sunset, uvIndexMax, rainSum, windSpeed} = day;
   return (
-    <div className=" bg-yellow-500">
-      <p>Date: 12.05.2024</p>
-      <p>Max UV Index: 123</p>
-      <p>Sunrise: 05:38</p>
-      <p>Sunset: 19:43</p>
-      <p>Rain Sum: 0</p>
-    </div>
+        <div className="p-5  min-w-[12rem] md:min-w-[20rem] pr-9">
+
+          <p className="flex justify-between">Date: <span>{date}</span></p>
+          <p className="flex justify-between">UV Index: <span>{uvIndexMax}</span></p>
+          <p className="flex justify-between">Sunrise: <span>{sunrise}</span></p>
+          <p className="flex justify-between">Sunset: <span>{sunset}</span></p>
+          <p className="flex justify-between">Rain Sum: <span>{rainSum}</span></p>
+          <p className="flex justify-between">Wind Speed: <span>{windSpeed}</span></p>
+        </div>
   );
 }
 
